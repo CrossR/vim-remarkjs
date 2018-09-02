@@ -19,7 +19,7 @@ function! remarkjs#build(file_name)
     silent exec title_insert_point .'delete _'
     let presentation_title = getline(search('^# .*'))[2:]
     call setline(title_insert_point, '    <title>' . presentation_title . '</title>')
-    
+
     silent write
     if !g:remarkjs_do_nothing_on_build
         if exists(":Gogo") == 2
