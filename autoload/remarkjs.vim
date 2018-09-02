@@ -9,9 +9,16 @@ function! remarkjs#build(file_name)
     silent exec 'edit '. a:file_name .'.html'
     silent 1,$ delete _
     silent exec 'keepalt read '. s:template
-    let insert_point = search('REPLACE_ME')
-    silent exec insert_point .'delete _'
-    silent exec insert_point .'read '. a:file_name
+
+    let body_insert_point = search('REPLACE_ME')
+    silent exec body_insert_point .'delete _'
+    silent exec body_insert_point .'read '. a:file_name
+
+    let title_insert_point = search('<title>REPLACE_TITLE</title>')
+    let presentation_title = getline(search('^# .*'))[2:]
+    silent exec title_insert_point .'delete _'
+    call setline(title_insert_point, '    <title>' . presentation_title . '</title>')
+
     silent write
     if !g:remarkjs_do_nothing_on_build
         if exists(":Gogo") == 2
