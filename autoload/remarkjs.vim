@@ -23,17 +23,26 @@ function! remarkjs#build(file_name)
     silent exec body_insert_point .'read '. a:file_name
 
     " Set the browser title part of the template.
-    let title_insert_point = search('<title>REPLACE_TITLE</title>')
-    silent exec title_insert_point .'delete _'
+    let title_insert_point = search('REPLACE_TITLE')
     let presentation_title = getline(search('^# .*'))[2:]
-    call setline(title_insert_point, '    <title>' . presentation_title . '</title>')
+    call setline(title_insert_point, substitute(
+                \ getline(title_insert_point),
+                \ 'REPLACE_TITLE',
+                \ presentation_title,
+                \ "")
+                \ )
 
     " Set the date part of the template.
     let date_insert_point = search('REPLACE_DATE_HERE')
     let presentation_date = getline(search('<!-- DATE:.*'))
     let presentation_date = presentation_date[11:]
     let presentation_date = presentation_date[:-5]
-    call setline(date_insert_point, substitute(getline(date_insert_point), 'REPLACE_DATE_HERE', presentation_date, ""))
+    call setline(date_insert_point, substitute(
+                \ getline(date_insert_point),
+                \ 'REPLACE_DATE_HERE',
+                \ presentation_date,
+                \ "")
+                \ )
 
     " Save and open if possible.
     silent write
