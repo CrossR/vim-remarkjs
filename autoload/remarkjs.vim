@@ -20,12 +20,11 @@ function! remarkjs#build(file_name)
     let presentation_title = getline(search('^# .*'))[2:]
     call setline(title_insert_point, '    <title>' . presentation_title . '</title>')
 
-    let date_insert_point = search('<div class="my-footer"><p>REPLACE_DATE_HERE</p></div>')
-    silent exec date_insert_point .'delete _'
+    let date_insert_point = search('REPLACE_DATE_HERE')
     let presentation_date = getline(search('<!-- DATE:.*'))
     let presentation_date = presentation_date[11:]
     let presentation_date = presentation_date[:-5]
-    call setline(date_insert_point, '<div class="my-footer"><p>' . presentation_date . '</p></div>')
+    call setline(date_insert_point, substitute(getline(date_insert_point), 'REPLACE_DATE_HERE', presentation_date, ""))
 
     silent write
     if !g:remarkjs_do_nothing_on_build
