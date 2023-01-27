@@ -27,7 +27,7 @@ function! remarkjs#build(file_name)
     call setline(l:title_insert_point, substitute(
                 \ getline(l:title_insert_point),
                 \ 'REPLACE_TITLE',
-                \ l:presentation_title,
+                \ escape(l:presentation_title, '&'),
                 \ "")
                 \ )
 
