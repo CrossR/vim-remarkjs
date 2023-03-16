@@ -23,7 +23,12 @@ function! remarkjs#build(file_name)
 
     " Set the browser title part of the template.
     let l:title_insert_point = search('REPLACE_TITLE')
-    let l:presentation_title = getline(search('^# .*'))[2:]
+
+    " Look for both <h1></h1> or # based titles.
+    let l:pattern = '.*<h1>\(.*\)</h1>\|^# \(.*\)'
+    let l:title_line = getline(search(l:pattern))
+    let l:presentation_title = matchlist(l:title_line, l:pattern)[1]
+
     call setline(l:title_insert_point, substitute(
                 \ getline(l:title_insert_point),
                 \ 'REPLACE_TITLE',
