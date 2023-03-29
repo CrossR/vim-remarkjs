@@ -48,6 +48,19 @@ function! remarkjs#build(file_name)
                 \ "")
                 \ )
 
+    " Interactively replace a placeholder title slide with the real one.
+    " This is useful for talks that you start and end on a title slide,
+    " to avoid duplication.
+    let l:title_slide_insert_point = search('INTRO_SLIDE')
+    let l:title_slide_start = search('class:.*title-slide.*')
+    let l:title_slide_end = search('---') - 1
+    let l:title_content  = getbufline(bufnr('%'), l:title_slide_start, l:title_slide_end)
+
+    if l:title_slide_insert_point != 0
+        call append(l:title_slide_insert_point, l:title_content)
+        call deletebufline(bufnr('%'), l:title_slide_insert_point, l:title_slide_insert_point)
+    endif
+
     " Save and open if possible.
     silent write
     if !g:remarkjs_do_nothing_on_build
