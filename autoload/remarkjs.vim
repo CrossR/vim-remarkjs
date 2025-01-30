@@ -48,6 +48,17 @@ function! remarkjs#build(file_name)
                 \ "")
                 \ )
 
+    " Set the slide ratio, if it is specified in the markdown.
+    " The default is 4:3.
+    let l:slide_ratio = '4:3'
+    let l:slide_ratio_line = search('const ratio = REPLACE_RATIO_HERE;')
+    call setline(l:slide_ratio_line, substitute(
+                \ getline(l:slide_ratio_line),
+                \ 'REPLACE_RATIO_HERE',
+                \ l:slide_ratio,
+                \ "")
+                \ )
+
     " Interactively replace a placeholder title slide with the real one.
     " This is useful for talks that you start and end on a title slide,
     " to avoid duplication.
