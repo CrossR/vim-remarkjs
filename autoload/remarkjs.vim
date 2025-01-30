@@ -49,8 +49,17 @@ function! remarkjs#build(file_name)
                 \ )
 
     " Set the slide ratio, if it is specified in the markdown.
-    " The default is 4:3.
-    let l:slide_ratio = '4:3'
+    " The default is 4:3, but read it from the markdown if it is specified.
+    let l:slide_ratio = '\"4:3\"'
+    let l:ratio_pattern = '.*ratio: \(.*\)'
+    let l:user_ratio = getline(search(l:ratio_pattern))
+    let l:user_ratio = matchlist(l:user_ratio, l:ratio_pattern)[1]
+
+    " If the user ratio isn't empty, use it.
+    if l:user_ratio != ''
+        let l:slide_ratio = '\"'. l:user_ratio .'\"'
+    endif
+
     let l:slide_ratio_line = search('const ratio = REPLACE_RATIO_HERE;')
     call setline(l:slide_ratio_line, substitute(
                 \ getline(l:slide_ratio_line),
